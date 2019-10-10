@@ -10,6 +10,14 @@ This package allows us to port our routes over to JavaScript, and gives us a bun
 
 ![Laroute in action](laroute.png)
 
+<p align="center">
+<a href="https://github.com/Te7a-Houdini/laroute/releases"><img src="https://img.shields.io/github/release/Te7a-Houdini/laroute.svg?style=flat-square" alt="Releases"></a>
+<a href="https://travis-ci.org/Te7a-Houdini/laroute"><img src="https://img.shields.io/travis/Te7a-Houdini/laroute/master.svg?style=flat-square" alt="Build Status"></a>
+<a href="https://styleci.io/repos/214170700"><img src="https://styleci.io/repos/214170700/shield" alt="StyleCI"></a>
+<a href="https://scrutinizer-ci.com/g/Te7a-Houdini/laroute/?branch=master"><img src="https://img.shields.io/scrutinizer/g/Te7a-Houdini/laroute.svg?style=flat-square" alt="Code Quality"></a>
+<a href="https://github.com/Te7a-Houdini/laroute/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Te7a-Houdini/laroute.svg?style=flat-square" alt="License"></a>
+<a href="https://packagist.org/packages/te7a-houdini/laroute"><img src="https://img.shields.io/packagist/dt/Te7a-Houdini/laroute.svg?style=flat-square" alt="Downloads"></a>
+
 ## Installation
 
 Install the usual [composer](https://getcomposer.org/) way.
