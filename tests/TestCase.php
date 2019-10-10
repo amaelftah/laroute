@@ -2,8 +2,8 @@
 
 namespace Te7aHoudini\Laroute\Tests;
 
-use Orchestra\Testbench\TestCase as BaseTestCase;
 use Te7aHoudini\Laroute\LarouteServiceProvider;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {

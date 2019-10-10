@@ -37,7 +37,7 @@ class LarouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the config path
+     * Get the config path.
      *
      * @return string
      */
@@ -73,7 +73,7 @@ class LarouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the command
+     * Register the command.
      *
      * @return void
      */
@@ -82,9 +82,9 @@ class LarouteServiceProvider extends ServiceProvider
         $this->app->singleton(
             'command.laroute.generate',
             function ($app) {
-                $config     = $app['config'];
-                $routes     = new Routes($app['router']->getRoutes(), $config->get('laroute.filter', 'all'), $config->get('laroute.action_namespace', ''));
-                $generator  = $app->make('Te7aHoudini\Laroute\Generators\GeneratorInterface');
+                $config = $app['config'];
+                $routes = new Routes($app['router']->getRoutes(), $config->get('laroute.filter', 'all'), $config->get('laroute.action_namespace', ''));
+                $generator = $app->make('Te7aHoudini\Laroute\Generators\GeneratorInterface');
 
                 return new LarouteGeneratorCommand($config, $routes, $generator);
             }

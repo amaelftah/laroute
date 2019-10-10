@@ -14,7 +14,7 @@ class CollectionTest extends TestCase
     {
         parent::setUp();
         $this->routeCollection = $this->mock('Illuminate\Routing\RouteCollection');
-        $this->routes          = $this->createInstance();
+        $this->routes = $this->createInstance();
     }
 
     protected function createInstance()
@@ -27,6 +27,7 @@ class CollectionTest extends TestCase
             ->shouldReceive('getIterator')
             ->once()
             ->andReturn(['Huh?']);
+
         return new Collection($this->routeCollection);
     }
 
