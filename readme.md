@@ -85,7 +85,7 @@ return [
      * the ported helper Laravel url/route functions and the route data to go
      * with them.
      */
-    'template' => 'vendor/lord/laroute/src/templates/laroute.js',
+    'template' => 'vendor/te7a-houdini/laroute/src/templates/laroute.js',
     
     /*
      * Appends a prefix to URLs. By default the prefix is an empty string.
@@ -236,4 +236,4 @@ Route::group(['laroute' => false], function () {
 
 ## Licence
 
-[View the licence in this repo.](https://github.com/aaronlord/laroute/blob/master/LICENSE)
+[View the licence in this repo.](https://github.com/Te7aHoudini/laroute/blob/master/LICENSE)
