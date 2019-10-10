@@ -2,6 +2,7 @@
 
 namespace Te7aHoudini\Laroute\Compilers;
 
+use Mockery;
 use Te7aHoudini\Laroute\Tests\TestCase;
 
 class CollectionTest extends TestCase
@@ -13,7 +14,7 @@ class CollectionTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->routeCollection = $this->mock('Illuminate\Routing\RouteCollection');
+        $this->routeCollection = Mockery::mock('Illuminate\Routing\RouteCollection');
         $this->routes = $this->createInstance();
     }
 
