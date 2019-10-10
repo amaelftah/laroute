@@ -26,8 +26,8 @@ class TemplateCompilerTest extends TestCase
     public function testItCanCompileAString()
     {
         $template = 'Hello $YOU$, my name is $ME$.';
-        $data     = ['you' => 'Stranger', 'me' => 'Aaron'];
-        $expected = "Hello Stranger, my name is Aaron.";
+        $data = ['you' => 'Stranger', 'me' => 'Aaron'];
+        $expected = 'Hello Stranger, my name is Aaron.';
 
         $this->assertSame($expected, $this->compiler->compile($template, $data));
     }

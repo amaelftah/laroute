@@ -16,7 +16,7 @@ class TemplateGeneratorTest extends TestCase
     {
         parent::setUp();
 
-        $this->compiler   = $this->mock('Te7aHoudini\Laroute\Compilers\CompilerInterface');
+        $this->compiler = $this->mock('Te7aHoudini\Laroute\Compilers\CompilerInterface');
         $this->filesystem = $this->mock('Illuminate\Filesystem\Filesystem');
 
         $this->generator = new TemplateGenerator($this->compiler, $this->filesystem);
@@ -32,10 +32,10 @@ class TemplateGeneratorTest extends TestCase
 
     public function testItWillCompileAndSaveATemplate()
     {
-        $template     = "Template";
+        $template = 'Template';
         $templatePath = '/templatePath';
         $templateData = ['foo', 'bar'];
-        $filePath     = '/filePath';
+        $filePath = '/filePath';
 
         $this->filesystem
             ->shouldReceive('get')
