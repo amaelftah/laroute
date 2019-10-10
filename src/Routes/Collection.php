@@ -1,171 +1,79 @@
 <?php
+namespace Te7aHoudini\Laroute\Routes;
 
-namespace Te7aHoudini\Laroute\Console\Commands;
-
-use Illuminate\Console\Command;
-use Illuminate\Config\Repository as Config;
-use Symfony\Component\Console\Input\InputOption;
-use Te7aHoudini\Laroute\Routes\Collection as Routes;
-use Te7aHoudini\Laroute\Generators\GeneratorInterface as Generator;
-
-class Collection extends Command
+use Illuminate\Routing\Route;
+use Illuminate\Routing\RouteCollection;
+use Illuminate\Support\Arr;
+use Te7aHoudini\Laroute\Routes\Exceptions\ZeroRoutesException;
+class Collection extends \Illuminate\Support\Collection
 {
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'laroute:generate';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Generate a laravel routes file';
-
-    /**
-     * Config.
-     *
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * An array of all the registered routes.
-     *
-     * @var \Te7aHoudini\Laroute\Routes\Collection
-     */
-    protected $routes;
-
-    /**
-     * The generator instance.
-     *
-     * @var \Te7aHoudini\Laroute\Generators\GeneratorInterface
-     */
-    protected $generator;
-
-    /**
-     * Create a new command instance.
-     *
-     * @param Config $config
-     * @param Routes $routes
-     * @param Generator $generator
-     */
-    public function __construct(Config $config, Routes $routes, Generator $generator)
+    public function __construct(RouteCollection $routes, $filter, $namespace)
     {
-        $this->config = $config;
-        $this->routes = $routes;
-        $this->generator = $generator;
-
-        parent::__construct();
+        $this->items = $this->parseRoutes($routes, $filter, $namespace);
     }
-
     /**
-     * Execute the console command.
+     * Parse the routes into a jsonable output.
      *
-     * @return void
+     * @param RouteCollection $routes
+     * @param string $filter
+     * @param string $namespace
+     *
+     * @return array
+     * @throws ZeroRoutesException
      */
-    public function handle()
+    protected function parseRoutes(RouteCollection $routes, $filter, $namespace)
     {
-        try {
-            $filePath = $this->generator->compile(
-                $this->getTemplatePath(),
-                $this->getTemplateData(),
-                $this->getFileGenerationPath()
-            );
-
-            $this->info("Created: {$filePath}");
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
+        $this->guardAgainstZeroRoutes($routes);
+        $results = [];
+        foreach ($routes as $route) {
+            $results[] = $this->getRouteInformation($route, $filter, $namespace);
+        }
+        return array_values(array_filter($results));
+    }
+    /**
+     * Throw an exception if there aren't any routes to process
+     *
+     * @param RouteCollection $routes
+     *
+     * @throws ZeroRoutesException
+     */
+    protected function guardAgainstZeroRoutes(RouteCollection $routes)
+    {
+        if (count($routes) < 1) {
+            throw new ZeroRoutesException("You don't have any routes!");
         }
     }
-
     /**
-     * Get path to the template file.
+     * Get the route information for a given route.
      *
-     * @return string
-     */
-    protected function getTemplatePath()
-    {
-        return $this->config->get('laroute.template');
-    }
-
-    /**
-     * Get the data for the template.
+     * @param $route \Illuminate\Routing\Route
+     * @param $filter string
+     * @param $namespace string
      *
      * @return array
      */
-    protected function getTemplateData()
+    protected function getRouteInformation(Route $route, $filter, $namespace)
     {
-        $namespace = $this->getOptionOrConfig('namespace');
-        $routes = $this->routes->toJSON();
-        $absolute = $this->config->get('laroute.absolute', false);
-        $rootUrl = $this->config->get('app.url', '');
-        $prefix = $this->config->get('laroute.prefix', '');
-
-        return compact('namespace', 'routes', 'absolute', 'rootUrl', 'prefix');
-    }
-
-    /**
-     * Get the path where the file will be generated.
-     *
-     * @return string
-     */
-    protected function getFileGenerationPath()
-    {
-        $path = $this->getOptionOrConfig('path');
-        $filename = $this->getOptionOrConfig('filename');
-
-        return "{$path}/{$filename}.js";
-    }
-
-    /**
-     * Get an option value either from console input, or the config files.
-     *
-     * @param $key
-     *
-     * @return array|mixed|string
-     */
-    protected function getOptionOrConfig($key)
-    {
-        if ($option = $this->option($key)) {
-            return $option;
+        $host    = $route->domain();
+        $methods = $route->methods();
+        $uri     = $route->uri();
+        $name    = $route->getName();
+        $action  = $route->getActionName();
+        $laroute = Arr::get($route->getAction(), 'laroute', null);
+        if(!empty($namespace)) {
+            $a = $route->getAction();
+            if(isset($a['controller'])) {
+                $action = str_replace($namespace.'\\', '', $action);
+            }
         }
-
-        return $this->config->get("laroute.{$key}");
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            [
-                'path',
-                'p',
-                InputOption::VALUE_OPTIONAL,
-                sprintf('Path to the javscript assets directory (default: "%s")', $this->config->get('laroute.path')),
-            ],
-            [
-                'filename',
-                'f',
-                InputOption::VALUE_OPTIONAL,
-                sprintf('Filename of the javascript file (default: "%s")', $this->config->get('laroute.filename')),
-            ],
-            [
-                'namespace',
-                null,
-                InputOption::VALUE_OPTIONAL, sprintf('Javascript namespace for the functions (think _.js) (default: "%s")', $this->config->get('laroute.namespace')),
-            ],
-            [
-                'prefix',
-                'pr',
-                InputOption::VALUE_OPTIONAL, sprintf('Prefix for the generated URLs (default: "%s")', $this->config->get('laroute.prefix')),
-            ],
-        ];
+        switch ($filter) {
+            case 'all':
+                if($laroute === false) return null;
+                break;
+            case 'only':
+                if($laroute !== true) return null;
+                break;
+        }
+        return compact('host', 'methods', 'uri', 'name', 'action');
     }
 }
