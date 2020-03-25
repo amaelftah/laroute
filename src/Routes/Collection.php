@@ -2,9 +2,9 @@
 
 namespace Te7aHoudini\Laroute\Routes;
 
-use Illuminate\Support\Arr;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\RouteCollection;
+use Illuminate\Support\Arr;
 use Te7aHoudini\Laroute\Routes\Exceptions\ZeroRoutesException;
 
 class Collection extends \Illuminate\Support\Collection

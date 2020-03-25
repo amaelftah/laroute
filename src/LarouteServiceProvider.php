@@ -3,8 +3,8 @@
 namespace Te7aHoudini\Laroute;
 
 use Illuminate\Support\ServiceProvider;
-use Te7aHoudini\Laroute\Routes\Collection as Routes;
 use Te7aHoudini\Laroute\Console\Commands\LarouteGeneratorCommand;
+use Te7aHoudini\Laroute\Routes\Collection as Routes;
 
 class LarouteServiceProvider extends ServiceProvider
 {
