@@ -2,11 +2,11 @@
 
 namespace Te7aHoudini\Laroute\Console\Commands;
 
-use Illuminate\Console\Command;
 use Illuminate\Config\Repository as Config;
+use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
-use Te7aHoudini\Laroute\Routes\Collection as Routes;
 use Te7aHoudini\Laroute\Generators\GeneratorInterface as Generator;
+use Te7aHoudini\Laroute\Routes\Collection as Routes;
 
 class LarouteGeneratorCommand extends Command
 {
